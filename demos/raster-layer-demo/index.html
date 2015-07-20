@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>leaflet ImageOverlayer demo </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../bower_components/leaflet/dist/leaflet.css" />
+</head>
+
+<body>
+    <div id="map" style="width: 600px; height: 400px"></div>
+    <script src="../../bower_components/leaflet/dist/leaflet.js"></script>
+    <script>
+    var map = L.map('map').setView([31, 120], 9);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
+        maxZoom: 18,
+        // attribution: 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'mapbox.streets'
+    }).addTo(map);
+
+
+    var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
+        imageBounds = [
+            [40.712216, -74.22655],
+            [40.773941, -74.12544]
+        ];
+
+    L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+    var rasterdata = {
+        "type": "Feature",
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                   [119.90203857421875,30.9320068359375],
+                   [119.90203857421875,31.46759033203125],
+                   [120.72052001953125,31.46759033203125],
+                   [120.72052001953125,30.9320068359375],
+                   [119.90203857421875,30.9320068359375]
+               ]
+            ]
+        },
+        "properties": {
+            "dataUrl": "http://www.rscloudmart.com/image//data/ZY02C/20150720/ZY02C_HRC_E119.4_N46.1_20150720_L1C0003162960/ZY02C_HRC_E119.4_N46.1_20150720_L1C0003162960_800_800.png?op=OPEN",
+            // "dataBounds": "[[南, 西], [北, 东]]",
+            "dataBounds": [[30.9320068359375, 119.90203857421875], [31.46759033203125, 120.72052001953125]],
+            "type": "RasterDataImage"
+        }
+    };
+
+    function addRasterData(rasterdata) {
+
+        var rasterdataImageOverlayer = L.imageOverlay(rasterdata.properties.dataUrl, rasterdata.properties.dataBounds);
+        rasterdataImageOverlayer.addTo(map);
+
+        var boundPolygon = L.geoJson(rasterdata,{
+            style: function(feature) {
+                return {color: '#03f', fill: false};
+            }
+        });
+        boundPolygon.addTo(map);
+    }
+
+    addRasterData(rasterdata);
+    </script>
+</body>
+
+</html>
